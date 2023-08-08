@@ -6,6 +6,8 @@ ToC:
 - [AKS in Azure](#aks-in-azure)
 - [GitHub Actions](#github-actions)
 - [AKS in Humanitec](#aks-in-humanitec)
+- [In-cluster MySQL database](#in-cluster-mysql-database)
+- [Terraform Driver resources](#terraform-driver-resources)
 
 ```bash
 export HUMANITEC_ORG=FIXME
@@ -162,10 +164,15 @@ curl "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/resources/defs" \
 ## In-cluster MySQL database
 
 ```bash
-
+yq -o json mysql-incluster-resource.yaml > mysql-incluster-resource.json
+curl "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/resources/defs" \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer ${HUMANITEC_TOKEN}" \
+    -d @mysql-incluster-resource.json
 ```
 
-## Terraform Driver
+## Terraform Driver resources
 
 ```bash
 TERRAFORM_CONTRIBUTOR_SP_NAME=humanitec-terraform
@@ -179,10 +186,10 @@ az role assignment create \
     --scope "/subscriptions/${AZURE_SUBSCRIPTION_ID}"
 ```
 
-## Azure Storage
+### Azure Storage
 
 FIXME
 
-## Azure MySQL
+### Azure MySQL
 
 FIXME
