@@ -9,6 +9,15 @@ ToC:
 - [In-cluster MySQL database](#in-cluster-mysql-database)
 - [Terraform Driver resources](#terraform-driver-resources)
 
+
+Tools needed:
+- `az`
+- `yq`
+- `jq`
+- `helm`
+- `gh`
+- `curl`
+
 ```bash
 export HUMANITEC_ORG=FIXME
 export AZURE_SUBCRIPTION_ID=FIXME
