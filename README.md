@@ -163,6 +163,7 @@ driver_inputs:
 criteria:
   - env_id: ${HUMANITEC_ENVIRONMENT}
 EOF
+
 yq -o json ${CLUSTER_NAME}.yaml > ${CLUSTER_NAME}.json
 curl "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/resources/defs" \
     -X POST \
@@ -200,36 +201,36 @@ az role assignment create \
 
 ```bash
 cat <<EOF > azure-blob-terraform.yaml
-apiVersion: core.api.humanitec.io/v1
-kind: Definition
-metadata:
-  id: azure-blob-terraform
-object:
-  name: azure-blob-terraform
-  type: azure-blob
-  driver_type: ${HUMANITEC_ORG}/terraform
-  driver_inputs:
-    values:
-      source:
-        path: resources/terraform/azure-blob/
-        rev: refs/heads/main
-        url: https://github.com/Humanitec-DemoOrg/azure-reference-architecture.git
-      variables:
-        storage_account_location: ${LOCATION}
-        resource_group_name: ${RESOURCE_GROUP}
-    secrets:
-      variables:
-        credentials:
-          azure_subscription_id: ${AZURE_SUBCRIPTION_ID}
-          azure_subscription_tenant_id: ${AZURE_SUBCRIPTION_TENANT_ID}
-          service_principal_id: ${TERRAFORM_CONTRIBUTOR_SP_ID}
-          service_principal_password: ${TERRAFORM_CONTRIBUTOR_SP_PASSWORD}
-  criteria:
-    - {}
+id: azure-blob-terraform
+name: azure-blob-terraform
+type: azure-blob
+driver_type: ${HUMANITEC_ORG}/terraform
+driver_inputs:
+  values:
+    source:
+      path: resources/terraform/azure-blob/
+      rev: refs/heads/main
+      url: https://github.com/Humanitec-DemoOrg/azure-reference-architecture.git
+    variables:
+      storage_account_location: ${LOCATION}
+      resource_group_name: ${RESOURCE_GROUP}
+  secrets:
+    variables:
+      credentials:
+        azure_subscription_id: ${AZURE_SUBCRIPTION_ID}
+        azure_subscription_tenant_id: ${AZURE_SUBCRIPTION_TENANT_ID}
+        service_principal_id: ${TERRAFORM_CONTRIBUTOR_SP_ID}
+        service_principal_password: ${TERRAFORM_CONTRIBUTOR_SP_PASSWORD}
+criteria:
+  - {}
 EOF
 
-humctl create \
-    -f azure-blob-terraform.yaml
+yq -o json azure-blob-terraform.yaml > azure-blob-terraform.json
+curl "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/resources/defs" \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer ${HUMANITEC_TOKEN}" \
+    -d @azure-blob-terraform.json
 ```
 
 ### Azure MySQL
