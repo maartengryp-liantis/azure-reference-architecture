@@ -1,6 +1,11 @@
 # azure-reference-architecture
-Snippets for the first draft of the Azure Reference Architecture
 
+Snippets for the first draft of the Azure Reference Architecture.
+
+ToC:
+- [AKS in Azure](#aks-in-azure)
+- [GitHub Actions](#github-actions)
+- [AKS in Humanitec](#aks-in-humanitec)
 
 ```bash
 export HUMANITEC_ORG=FIXME
@@ -20,6 +25,8 @@ az group create \
     -n ${RESOURCE_GROUP} \
     -l ${LOCATION}
 ```
+
+## AKS in Azure
 
 ```bash
 CLUSTER_NAME=ref-arch-aks
@@ -94,6 +101,8 @@ az aks update \
     --attach-acr ${ACR_ID}
 ```
 
+## GitHub Actions
+
 ```bash
 ACR_PUSH_SP_NAME=github-to-${ACR_NAME}
 ACR_PUSH_SP_CREDENTIALS=$(az ad sp create-for-rbac \
@@ -105,6 +114,22 @@ az role assignment create \
     --scope ${ACR_ID}
 ACR_PUSH_SP_PASSWORD=$(echo ${ACR_PUSH_SP_CREDENTIALS} | jq -r .password)
 ```
+
+```bash
+gh secret set ACR_PUSH_SP_ID -b"${ACR_PUSH_SP_ID}" -o ${GITHUB_ORG}
+gh secret set ACR_PUSH_SP_PASSWORD -b"${ACR_PUSH_SP_PASSWORD}" -o ${GITHUB_ORG}
+gh secret set ACR_SERVER_NAME -b"${ACR_NAME}.azurecr.io" -o ${GITHUB_ORG}
+```
+
+Then the GitHub Actions needs to be updated to include this step to push the container images in ACR:
+```yaml
+echo "${{ secrets.ACR_PUSH_SP_PASSWORD }}" | docker login \
+        ${{ secrets.ACR_SERVER_NAME }} \
+        -u ${{ secrets.ACR_PUSH_SP_ID }} \
+        --password-stdin
+```
+
+## AKS in Humanitec
 
 ```bash
 HUMANITEC_TOKEN=FIXME
@@ -133,3 +158,31 @@ curl "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/resources/defs" \
     -H "Authorization: Bearer ${HUMANITEC_TOKEN}" \
     -d @${CLUSTER_NAME}.json
 ```
+
+## In-cluster MySQL database
+
+```bash
+
+```
+
+## Terraform Driver
+
+```bash
+TERRAFORM_CONTRIBUTOR_SP_NAME=humanitec-terraform
+TERRAFORM_CONTRIBUTOR_SP_CREDENTIALS=$(az ad sp create-for-rbac \
+    -n ${TERRAFORM_CONTRIBUTOR_SP_NAME})
+TERRAFORM_CONTRIBUTOR_SP_ID=$(echo ${TERRAFORM_CONTRIBUTOR_SP_CREDENTIALS} | jq -r .appId)
+TERRAFORM_CONTRIBUTOR_SP_PASSWORD=$(echo ${TERRAFORM_CONTRIBUTOR_SP_CREDENTIALS} | jq -r .password)
+az role assignment create \
+    --role "Contributor" \
+    --assignee ${TERRAFORM_CONTRIBUTOR_SP_ID} \
+    --scope "/subscriptions/${AZURE_SUBSCRIPTION_ID}"
+```
+
+## Azure Storage
+
+FIXME
+
+## Azure MySQL
+
+FIXME
