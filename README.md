@@ -8,7 +8,8 @@ ToC:
 - [AKS in Humanitec](#aks-in-humanitec)
 - [In-cluster MySQL database](#in-cluster-mysql-database)
 - [Terraform Driver resources](#terraform-driver-resources)
-
+  - [Azure Blob Storage](#azure-blob-storage)
+  - [Azure MySQL](#azure-mysql)
 
 Tools needed:
 - `az`
@@ -195,7 +196,7 @@ az role assignment create \
     --scope "/subscriptions/${AZURE_SUBSCRIPTION_ID}"
 ```
 
-### Azure Storage
+### Azure Blob Storage
 
 ```bash
 cat <<EOF > azure-blob-terraform.yaml
