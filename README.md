@@ -93,3 +93,43 @@ az aks update \
     -g ${RESOURCE_GROUP}\
     --attach-acr ${ACR_ID}
 ```
+
+```bash
+ACR_PUSH_SP_NAME=github-to-${ACR_NAME}
+ACR_PUSH_SP_CREDENTIALS=$(az ad sp create-for-rbac \
+    -n ${ACR_PUSH_SP_NAME})
+ACR_PUSH_SP_ID=$(echo ${ACR_PUSH_SP_CREDENTIALS} | jq -r .appId)
+az role assignment create \
+    --role acrpush \
+    --assignee ${ACR_PUSH_SP_ID} \
+    --scope ${ACR_ID}
+ACR_PUSH_SP_PASSWORD=$(echo ${ACR_PUSH_SP_CREDENTIALS} | jq -r .password)
+```
+
+```bash
+HUMANITEC_TOKEN=FIXME
+HUMANITEC_ENVIRONMENT=development
+
+cat <<EOF > ${CLUSTER_NAME}.yaml
+id: ${CLUSTER_NAME}
+name: ${CLUSTER_NAME}
+type: k8s-cluster
+driver_type: humanitec/k8s-cluster-aks
+driver_inputs:
+  values:
+    loadbalancer: ${INGRESS_IP}
+    name: ${CLUSTER_NAME}
+    resource_group: ${RESOURCE_GROUP}
+    subscription_id: ${AZURE_SUBCRIPTION_ID}
+  secrets:
+    credentials: ${AKS_ADMIN_SP_CREDENTIALS}
+criteria:
+  - env_id: ${HUMANITEC_ENVIRONMENT}
+EOF
+yq -o json ${CLUSTER_NAME}.yaml > ${CLUSTER_NAME}.json
+curl "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/resources/defs" \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer ${HUMANITEC_TOKEN}" \
+    -d @${CLUSTER_NAME}.json
+```
