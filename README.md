@@ -50,6 +50,7 @@ CLUSTER_NAME=ref-arch-aks
 CLUSTER_NODE_COUNT=3
 CLUSTER_NODE_SIZE=Standard_DS2_v2 # Bigger size like Standard_D8s_v3 could be used if you have ~20 participants
 HUMANITEC_IP_ADDRESSES="34.159.97.57/32,35.198.74.96/32,34.141.77.162/32,34.89.188.214/32,34.159.140.35/32,34.89.165.141/32"
+LOCAL_IP_ADRESS=$(curl -s checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
 
 az aks create \
     -g ${RESOURCE_GROUP} \
@@ -57,7 +58,7 @@ az aks create \
     -l ${LOCATION} \
     --node-count ${CLUSTER_NODE_COUNT} \
     --node-vm-size ${CLUSTER_NODE_SIZE} \
-    --api-server-authorized-ip-ranges ${HUMANITEC_IP_ADDRESSES} \
+    --api-server-authorized-ip-ranges ${HUMANITEC_IP_ADDRESSES},${LOCAL_IP_ADRESS}/32 \
     --no-ssh-key
 ```
 
