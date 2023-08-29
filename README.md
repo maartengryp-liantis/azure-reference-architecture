@@ -38,6 +38,11 @@ az group create \
     -l ${LOCATION}
 ```
 
+```bash
+az provider register --namespace Microsoft.Network
+az provider register --namespace Microsoft.ContainerService
+```
+
 ## AKS in Azure
 
 ```bash
