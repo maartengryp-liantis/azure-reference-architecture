@@ -46,7 +46,7 @@ az provider register --namespace Microsoft.ContainerService
 ## AKS in Azure
 
 ```bash
-CLUSTER_NAME=ref-arch-aks
+CLUSTER_NAME=${RESOURCE_GROUP}-ref-arch-aks
 CLUSTER_NODE_COUNT=3
 CLUSTER_NODE_SIZE=Standard_DS2_v2 # Bigger size like Standard_D8s_v3 could be used if you have ~20 participants
 HUMANITEC_IP_ADDRESSES="34.159.97.57/32,35.198.74.96/32,34.141.77.162/32,34.89.188.214/32,34.159.140.35/32,34.89.165.141/32"
