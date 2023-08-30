@@ -23,7 +23,7 @@ driver_inputs:
         user: {{ randAlpha 8 | lower | quote }}
         password: {{ randAlphaNum 16 | quote }}
         rootPassword: {{ randAlphaNum 16 | quote }}
-        database: bank-db
+        database: {{ randAlpha 8 | lower | quote }}
         {{- end }}
         name: mysql-{{ .id }}
       manifests: |-
