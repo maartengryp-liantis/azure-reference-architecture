@@ -41,6 +41,7 @@ az group create \
 ```bash
 az provider register --namespace Microsoft.Network
 az provider register --namespace Microsoft.ContainerService
+az provider register --namespace Microsoft.ContainerRegistry
 ```
 
 ## AKS in Azure
