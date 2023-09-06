@@ -1,0 +1,26 @@
+name: ci
+permissions:
+  contents: read
+on:
+  push:
+jobs:
+  job:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: terraform validate - azure-aks-datasource
+        run: |
+          cd terraform/azure-aks-datasource
+          terraform init -backend=false
+          terraform validate
+      - name: terraform validate - azure-blob
+        run: |
+          cd terraform/azure-blob
+          terraform init -backend=false
+          terraform validate
+      - name: terraform validate - azure-mysql
+        run: |
+          cd terraform/azure-mysql
+          terraform init -backend=false
+          terraform validate
