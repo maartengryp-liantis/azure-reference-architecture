@@ -11,16 +11,16 @@ jobs:
         uses: actions/checkout@v4
       - name: terraform validate - azure-aks-datasource
         run: |
-          cd terraform/azure-aks-datasource
+          cd resources/terraform/azure-aks-datasource
           terraform init -backend=false
           terraform validate
       - name: terraform validate - azure-blob
         run: |
-          cd terraform/azure-blob
+          cd resources/terraform/azure-blob
           terraform init -backend=false
           terraform validate
       - name: terraform validate - azure-mysql
         run: |
-          cd terraform/azure-mysql
+          cd resources/terraform/azure-mysql
           terraform init -backend=false
           terraform validate
