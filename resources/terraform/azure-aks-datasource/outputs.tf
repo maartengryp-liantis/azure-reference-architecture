@@ -1,5 +1,5 @@
 output "loadbalancer" {
-  value =  data.kubernetes_service.ingress_nginx_controller.status.0.load_balancer.0.ingress.0.ip
+  value =  data.azurerm_public_ip.ingress_nginx.ip_address
 }
 
 output "name" {

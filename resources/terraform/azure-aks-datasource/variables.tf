@@ -18,3 +18,9 @@ variable "aks_cluster_name" {
   description = "Name of the AKS cluster"
   type        = string
 }
+
+variable "ingress_nginx_public_ip_address_name" {
+  description = "Name of the Nginx Ingress controller public IP address"
+  type        = string
+  default     = "${var.aks_cluster_name}-ingress-nginx"
+}

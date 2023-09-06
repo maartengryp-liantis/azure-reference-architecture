@@ -21,8 +21,8 @@ Tools needed:
 
 ```bash
 export HUMANITEC_ORG=FIXME
-export AZURE_SUBCRIPTION_ID=FIXME
-export AZURE_SUBCRIPTION_TENANT_ID=FIXME
+export AZURE_SUBSCRIPTION_ID=FIXME
+export AZURE_SUBSCRIPTION_TENANT_ID=FIXME
 export GITHUB_ORG=FIXME
 ```
 
@@ -31,7 +31,7 @@ RESOURCE_GROUP=${HUMANITEC_ORG}
 LOCATION=eastus
 
 az account set \
-    -s ${AZURE_SUBCRIPTION_ID}
+    -s ${AZURE_SUBSCRIPTION_ID}
 
 az group create \
     -n ${RESOURCE_GROUP} \
@@ -70,19 +70,46 @@ az aks get-credentials \
 ```
 
 ```bash
+az network public-ip create \
+    -g ${RESOURCE_GROUP} \
+    -n ${CLUSTER_NAME}-ingress-nginx \
+    --sku Standard \
+    --allocation-method Static
+```
+
+```bash
+INGRESS_IP=$(az network public-ip show \
+    -g ${RESOURCE_GROUP} \
+    -n ${CLUSTER_NAME}-ingress-nginx \
+    --query ipAddress \
+    -o tsv)
+```
+
+```bash
+AKS_CLIENT_ID=$(az aks show \
+    -n ${CLUSTER_NAME} \
+    -g ${RESOURCE_GROUP} \
+    -o tsv \
+    --query identity.principalId)
+RG_SCOPE=$(az group show \
+    --name ${RESOURCE_GROUP} \
+    --query id \
+    -o tsv)
+az role assignment create \
+    --assignee ${AKS_CLIENT_ID} \
+    --role "Network Contributor" \
+    --scope ${RG_SCOPE}
+```
+
+```bash
 helm upgrade \
     --install ingress-nginx ingress-nginx \
     --repo https://kubernetes.github.io/ingress-nginx \
     --namespace ingress-nginx \
     --create-namespace \
+    --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-ipv4"=${INGRESS_IP} \
+    --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-resource-group"=${RESOURCE_GROUP} \
     --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
-```
-
-```bash
-INGRESS_IP=$(kubectl get svc ingress-nginx-controller \
-    -n ingress-nginx \
-    -o jsonpath="{.status.loadBalancer.ingress[*].ip}")
-echo ${INGRESS_IP}
 ```
 
 ```bash
@@ -164,7 +191,7 @@ driver_inputs:
     loadbalancer: ${INGRESS_IP}
     name: ${CLUSTER_NAME}
     resource_group: ${RESOURCE_GROUP}
-    subscription_id: ${AZURE_SUBCRIPTION_ID}
+    subscription_id: ${AZURE_SUBSCRIPTION_ID}
   secrets:
     credentials: ${AKS_ADMIN_SP_CREDENTIALS}
 criteria:
@@ -224,8 +251,8 @@ driver_inputs:
   secrets:
     variables:
       credentials:
-        azure_subscription_id: ${AZURE_SUBCRIPTION_ID}
-        azure_subscription_tenant_id: ${AZURE_SUBCRIPTION_TENANT_ID}
+        azure_subscription_id: ${AZURE_SUBSCRIPTION_ID}
+        azure_subscription_tenant_id: ${AZURE_SUBSCRIPTION_TENANT_ID}
         service_principal_id: ${TERRAFORM_CONTRIBUTOR_SP_ID}
         service_principal_password: ${TERRAFORM_CONTRIBUTOR_SP_PASSWORD}
 EOF
@@ -258,8 +285,8 @@ driver_inputs:
   secrets:
     variables:
       credentials:
-        azure_subscription_id: ${AZURE_SUBCRIPTION_ID}
-        azure_subscription_tenant_id: ${AZURE_SUBCRIPTION_TENANT_ID}
+        azure_subscription_id: ${AZURE_SUBSCRIPTION_ID}
+        azure_subscription_tenant_id: ${AZURE_SUBSCRIPTION_TENANT_ID}
         service_principal_id: ${TERRAFORM_CONTRIBUTOR_SP_ID}
         service_principal_password: ${TERRAFORM_CONTRIBUTOR_SP_PASSWORD}
 EOF
