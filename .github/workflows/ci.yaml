@@ -9,9 +9,9 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v4
-      - name: terraform validate - azure-aks-datasource
+      - name: terraform validate - azure-aks
         run: |
-          cd resources/terraform/azure-aks-datasource
+          cd resources/terraform/azure-aks
           terraform init -backend=false
           terraform validate
       - name: terraform validate - azure-blob
