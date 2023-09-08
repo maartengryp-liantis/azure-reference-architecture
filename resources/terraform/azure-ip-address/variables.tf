@@ -14,12 +14,7 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "aks_cluster_name" {
-  description = "Name of the AKS cluster"
-  type        = string
-}
-
-variable "ingress_nginx_public_ip_address" {
-  description = "Public IP address of the Nginx Ingress controller"
+variable "public_ip_address_name" {
+  description = "Name of the Nginx Ingress controller public IP address"
   type        = string
 }
