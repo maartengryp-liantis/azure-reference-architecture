@@ -19,22 +19,13 @@ output "cluster_type" {
   value = "aks"
 }
 
-output "sp_application_id" {
-  value = azuread_application.application.application_id
-  sensitive = true
-}
-
-output "sp_display_name" {
-  value = azuread_application.application.display_name
-  sensitive = true
-}
-
-output "sp_password" {
-  value = azuread_service_principal_password.password.value
-  sensitive = true
-}
-
-output "sp_tenant_id" {
-  value = var.credentials.azure_subscription_tenant_id
+output "credentials" {
+  value = jsonencode(
+        {
+          appId       = azuread_application.application.application_id
+          displayName = azuread_application.application.display_name
+          password    = azuread_service_principal_password.password.value
+          tenant      = var.credentials.azure_subscription_tenant_id
+        })
   sensitive = true
 }
