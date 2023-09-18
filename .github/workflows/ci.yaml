@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v4
       - name: terraform validate - azure-aks
         run: |
-          cd resources/terraform/azure-aks
+          cd resources/terraform/azure-aks-existing
           terraform init -backend=false
           terraform validate
       - name: terraform validate - azure-blob
