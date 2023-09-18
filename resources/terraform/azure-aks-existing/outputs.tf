@@ -15,6 +15,10 @@ output "subscription_id" {
   sensitive = true
 }
 
+output "cluster_type" {
+  value = "aks"
+}
+
 output "sp_application_id" {
   value = azuread_application.application.application_id
   sensitive = true
