@@ -1,3 +1,5 @@
+[![ci](https://github.com/Humanitec-DemoOrg/azure-reference-architecture/actions/workflows/ci.yaml/badge.svg)](https://github.com/Humanitec-DemoOrg/azure-reference-architecture/actions/workflows/ci.yaml)
+
 # azure-reference-architecture
 
 Snippets for the first draft of the Azure Reference Architecture.
