@@ -11,8 +11,7 @@ output "resource_group" {
 }
 
 output "subscription_id" {
-  value     = var.credentials.azure_subscription_id
-  sensitive = true
+  value     = nonsensitive(var.credentials.azure_subscription_id)
 }
 
 output "cluster_type" {
