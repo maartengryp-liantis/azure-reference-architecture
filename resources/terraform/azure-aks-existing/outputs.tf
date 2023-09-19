@@ -1,5 +1,5 @@
 output "loadbalancer" {
-  value = data.azurerm_public_ip.ingress_nginx.ip_address
+  value = data.azurerm_public_ip.public_ip.ip_address
 }
 
 output "name" {
