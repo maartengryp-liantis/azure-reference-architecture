@@ -20,12 +20,11 @@ output "cluster_type" {
 }
 
 output "credentials" {
-  value = jsonencode(
-        {
-          appId       = azuread_application.application.application_id
-          displayName = azuread_application.application.display_name
-          password    = azuread_service_principal_password.password.value
-          tenant      = var.credentials.azure_subscription_tenant_id
-        })
+  value = {
+    appId       = azuread_application.application.application_id
+    displayName = azuread_application.application.display_name
+    password    = azuread_service_principal_password.password.value
+    tenant      = var.credentials.azure_subscription_tenant_id
+  }
   sensitive = true
 }
