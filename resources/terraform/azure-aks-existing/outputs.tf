@@ -1,5 +1,5 @@
 output "loadbalancer" {
-  value =  var.ingress_nginx_public_ip_address
+  value = data.azurerm_public_ip.ingress_nginx.ip_address
 }
 
 output "name" {
@@ -11,7 +11,7 @@ output "resource_group" {
 }
 
 output "subscription_id" {
-  value     = nonsensitive(var.credentials.azure_subscription_id)
+  value = nonsensitive(var.credentials.azure_subscription_id)
 }
 
 output "cluster_type" {
