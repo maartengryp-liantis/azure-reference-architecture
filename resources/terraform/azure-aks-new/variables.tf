@@ -29,3 +29,9 @@ variable "existing_acr_name" {
   description = "Name of the existing ACR to attach to AKS"
   type        = string
 }
+
+variable "enable_gpu_nodepool" {
+  description = "Create a nodepool dedicated to GPU."
+  type        = bool
+  default     = false
+}
