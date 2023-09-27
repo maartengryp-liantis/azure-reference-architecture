@@ -9,14 +9,14 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v4
-      - name: terraform validate - azure-aks-existing
+      - name: terraform validate - aks-existing
         run: |
-          cd resources/terraform/azure-aks-existing
+          cd resources/terraform/aks-existing
           terraform init -backend=false
           terraform validate
-      - name: terraform validate - azure-aks-new
+      - name: terraform validate - aks-new
         run: |
-          cd resources/terraform/azure-aks-new
+          cd resources/terraform/aks-new
           terraform init -backend=false
           terraform validate
       - name: terraform validate - azure-blob
