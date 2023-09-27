@@ -12,7 +12,7 @@ object:
     values:
       append_logs_to_error: true
       source:
-        path: resources/terraform/azure-aks-new
+        path: resources/terraform/aks-new
         rev: refs/heads/main
         url: https://github.com/Humanitec-DemoOrg/azure-reference-architecture.git
       variables:
