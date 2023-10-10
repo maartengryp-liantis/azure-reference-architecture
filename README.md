@@ -21,6 +21,10 @@ Tools needed:
 - `gh`
 - `curl`
 
+Roles needed:
+- `Application Administrator`
+- `Application Developer`
+
 ```bash
 export HUMANITEC_ORG=FIXME
 export AZURE_SUBSCRIPTION_ID=FIXME
