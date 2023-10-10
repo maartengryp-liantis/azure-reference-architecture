@@ -7,7 +7,7 @@ metadata:
 object:
   name: aks-cluster-existing
   type: k8s-cluster
-  driver_type: ${HUMANITEC_ORG}/terraform
+  driver_type: humanitec/terraform
   driver_inputs:
     values:
       append_logs_to_error: true

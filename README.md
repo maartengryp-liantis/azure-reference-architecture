@@ -244,7 +244,7 @@ cat <<EOF > azure-blob-terraform.yaml
 id: azure-blob-terraform
 name: azure-blob-terraform
 type: azure-blob
-driver_type: ${HUMANITEC_ORG}/terraform
+driver_type: humanitec/terraform
 driver_inputs:
   values:
     source:
@@ -278,7 +278,7 @@ cat <<EOF > azure-mysql-terraform.yaml
 id: azure-mysql-terraform
 name: azure-mysql-terraform
 type: azure-mysql
-driver_type: ${HUMANITEC_ORG}/terraform
+driver_type: humanitec/terraform
 driver_inputs:
   values:
     source:
