@@ -277,7 +277,7 @@ curl "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/resources/defs" \
 cat <<EOF > azure-mysql-terraform.yaml
 id: azure-mysql-terraform
 name: azure-mysql-terraform
-type: azure-mysql
+type: mysql
 driver_type: humanitec/terraform
 driver_inputs:
   values:
