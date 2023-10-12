@@ -94,8 +94,9 @@ driver_inputs:
       outputs: |
         host: {{ .init.name }}
         port: {{ .init.port }}
+        name: {{ .init.database }}
+      secrets: |
         password: {{ .init.password }}
         username: {{ .init.user }}
-        name: {{ .init.database }}
 criteria:
   - {}
