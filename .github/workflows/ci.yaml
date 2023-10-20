@@ -29,3 +29,8 @@ jobs:
           cd resources/terraform/azure-mysql
           terraform init -backend=false
           terraform validate
+      - name: terraform validate - azure-redis-existing
+        run: |
+          cd resources/terraform/azure-redis-existing
+          terraform init -backend=false
+          terraform validate
