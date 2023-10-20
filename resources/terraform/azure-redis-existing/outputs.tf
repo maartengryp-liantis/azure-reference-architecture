@@ -1,3 +1,8 @@
+output "user" {
+  value     = ""
+  sensitive = true
+}
+
 output "password" {
   value     = data.azurerm_redis_cache.redis.primary_access_key
   sensitive = true
