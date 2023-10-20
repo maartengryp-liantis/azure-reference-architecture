@@ -8,7 +8,7 @@ output "host" {
 }
 
 output "port" {
-  value = data.azurerm_redis_cache.redis.sslPort
+  value = data.azurerm_redis_cache.redis.ssl_port
 }
 
 output "credentials" {
