@@ -1,35 +1,39 @@
-id: mysql-in-cluster
-name: mysql-in-cluster
-type: mysql
-driver_type: humanitec/template
-driver_inputs:
-  values:
-    templates:
-      cookie: |
-        port: {{ .init.port }}
-        user: {{ .init.user }}
-        password: {{ .init.password }}
-        rootPassword: {{ .init.rootPassword }}
-        database: {{ .init.database }}
-      init: |-
-        {{- if .cookie}}
-        port: {{ .cookie.port }}
-        user: {{ .cookie.user }}
-        password: {{ .cookie.password }}
-        rootPassword: {{ .cookie.rootPassword }}
-        database: {{ .cookie.database }}
-        {{- else }}
-        port: 3306
-        user: {{ randAlpha 8 | lower | quote }}
-        password: {{ randAlphaNum 16 | quote }}
-        rootPassword: {{ randAlphaNum 16 | quote }}
-        database: {{ randAlpha 8 | lower | quote }}
-        {{- end }}
-        name: mysql-{{ .id }}
-      manifests: |-
-        deployment.yaml:
-          location: namespace
-          data:
+apiVersion: core.api.humanitec.io/v1
+kind: Definition
+metadata:
+  id: mysql-in-cluster
+object:
+  name: mysql-in-cluster
+  type: mysql
+  driver_type: humanitec/template
+  driver_inputs:
+    values:
+      templates:
+        cookie: |
+          port: {{ .init.port }}
+          user: {{ .init.user }}
+          password: {{ .init.password }}
+          rootPassword: {{ .init.rootPassword }}
+          database: {{ .init.database }}
+        init: |-
+          {{- if .cookie}}
+          port: {{ .cookie.port }}
+          user: {{ .cookie.user }}
+          password: {{ .cookie.password }}
+          rootPassword: {{ .cookie.rootPassword }}
+          database: {{ .cookie.database }}
+          {{- else }}
+          port: 3306
+          user: {{ randAlpha 8 | lower | quote }}
+          password: {{ randAlphaNum 16 | quote }}
+          rootPassword: {{ randAlphaNum 16 | quote }}
+          database: {{ randAlpha 8 | lower | quote }}
+          {{- end }}
+          name: mysql-{{ .id }}
+        manifests: |-
+          deployment.yaml:
+            location: namespace
+            data:
               apiVersion: apps/v1
               kind: Deployment
               metadata:
@@ -66,9 +70,9 @@ driver_inputs:
                             key: MYSQL_PASSWORD
                       ports:
                       - containerPort: {{ .init.port }}
-        service.yaml:
-          location: namespace
-          data:
+          service.yaml:
+            location: namespace
+            data:
               apiVersion: v1
               kind: Service
               metadata:
@@ -79,24 +83,22 @@ driver_inputs:
                 selector:
                   app: {{ .init.name }}
                 clusterIP: None
-        secret.yaml:
-          location: namespace
-          data:
-            apiVersion: v1
-            kind: Secret
-            metadata:
-              name: {{ .init.name }}
-            type: Opaque
+          secret.yaml:
+            location: namespace
             data:
-              MYSQL_ROOT_PASSWORD: {{ .init.rootPassword | b64enc }}
-              MYSQL_PASSWORD: {{ .init.password | b64enc }}
-              MYSQL_USER: {{ .init.user | b64enc }}
-      outputs: |
-        host: {{ .init.name }}
-        port: {{ .init.port }}
-        name: {{ .init.database }}
-      secrets: |
-        password: {{ .init.password }}
-        username: {{ .init.user }}
-criteria:
-  - {}
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: {{ .init.name }}
+              type: Opaque
+              data:
+                MYSQL_ROOT_PASSWORD: {{ .init.rootPassword | b64enc }}
+                MYSQL_PASSWORD: {{ .init.password | b64enc }}
+                MYSQL_USER: {{ .init.user | b64enc }}
+        outputs: |
+          host: {{ .init.name }}
+          port: {{ .init.port }}
+          name: {{ .init.database }}
+        secrets: |
+          password: {{ .init.password }}
+          username: {{ .init.user }}
