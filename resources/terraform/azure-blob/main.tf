@@ -14,7 +14,7 @@ resource "random_string" "storage_container_name_sufix" {
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account
 resource "azurerm_storage_account" "storage_account" {
-  name                     = "storage${random_string.storage_account_name_sufix.result}tooooooooooooooolooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong"
+  name                     = "storage${random_string.storage_account_name_sufix.result}update"
   resource_group_name      = var.resource_group_name
   location                 = var.storage_account_location
   account_tier             = "Standard"
